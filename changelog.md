@@ -1,4 +1,6 @@
 # Changelog for Infamick Script
+## V2.7 - Google Home "device not avaiable on the network" FIX (March 13, 25)
+- Added fix inside GMS Disable script
 ## V2.6 - Fixes (August 24, 24)
 - Fix Magisk installation
 - Fix Battery info

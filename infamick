@@ -410,7 +410,7 @@ services=(
 help_menu() {
     echo
     printf "\n${BOLD}infamick - System Utility Script${RESET}"
-    printf "\n${RED}${BOLD}2.6 (202408241)"
+    printf "\n${RED}${BOLD}2.7 (202503131)"
     echo
     printf "\n${GREEN}Usage:${RESET} infamick ${BOLD}<command> ${BLUE}${BOLD}<2ndcommand>${RESET}"
     echo
@@ -548,7 +548,26 @@ battinfo() {
     printf "${INDENTN}${GREEN}[i] Your battery charging cycles are ${RED}${BOLD}$cycles${RESET}\n"
     exit 0
 }
-
+gms_homefix() {
+    printf "${INDENTN}${LIGHT_YELLOW}[?]Do you want to fix Google Home 'device not" 
+    printf "${INDENTN}${LIGHT_YELLOW}avaiable on the network' error? (Y/n): "
+        read -n 1 confirm_choice
+    case $confirm_choice in
+        [Yy]*)
+            printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
+            sleep 2
+            pm enable com.google.android.gms/com.google.android.location.network.NetworkLocationService
+            pm enable com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent
+            printf "${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
+            ;;
+        [nN])
+          printf "${INDENTN}${GREEN}[i]No fix choosed${RESET}\n"
+            ;;
+        *)
+            printf "${INDENTN}${RED}Error: Wrong option '$confirm_choice'${RESET}\n"
+            ;;
+    esac
+}
 gms_disable() {
     printf "${INDENTN}${YELLOW}[i]Disabling GMS${RESET}\n"
     sleep 2
@@ -556,6 +575,7 @@ gms_disable() {
         pm disable "$service"
     done
     printf "${INDENT}${GREEN}[i]GMS disable process completed.${RESET}\n"
+    gms_homefix
 }
 
 gms_enable() {
