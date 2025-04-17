@@ -407,10 +407,14 @@ services=(
 "com.google.android.gms/.stats.service.DropBoxEntryAddedService"
 "com.google.android.gms/.chimera.GmsIntentOperationService"
 )
+services_gmshome=(
+"com.google.android.gms/com.google.android.location.network.NetworkLocationService"
+"enable com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
+)
 help_menu() {
     echo
     printf "\n${BOLD}infamick - System Utility Script${RESET}"
-    printf "\n${RED}${BOLD}2.7 (202503131)"
+    printf "\n${RED}${BOLD}2.8 (202504171)"
     echo
     printf "\n${GREEN}Usage:${RESET} infamick ${BOLD}<command> ${BLUE}${BOLD}<2ndcommand>${RESET}"
     echo
@@ -554,11 +558,26 @@ gms_homefix() {
         read -n 1 confirm_choice
     case $confirm_choice in
         [Yy]*)
+            i=0
+            printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmshome[@]}${RESET}"
             printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
             sleep 2
-            pm enable com.google.android.gms/com.google.android.location.network.NetworkLocationService
-            pm enable com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent
-            printf "${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
+    
+            while [ $i -lt ${#services_gmshome[@]} ]; do
+                service_number=$((i + 1))
+                service="${services_gmshome[$i]}"
+                printf "${INDENTN}${BLUE}[$service_number/${#services_gmshome[@]}] Enabling the activity: $service\n"
+                pm enable "$services_gmshome" > /dev/null 2>&1
+                status=$?
+    
+                if [ $status -eq 0 ]; then
+                   printf "${INDENT}${BOLD}${GREEN}[+] Activity enabled successfully.\n"
+                else
+                   printf "${INDENT}${RED}${BOLD}[!] Error: Unable to enable the activity.\n"
+                fi
+                i=$((i + 1))
+            done
+            printf "\n${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
             ;;
         [nN])
           printf "${INDENTN}${GREEN}[i]No fix choosed${RESET}\n"
@@ -569,22 +588,55 @@ gms_homefix() {
     esac
 }
 gms_disable() {
+    i=0
+    printf "${INDENTN}${YELLOW}[i]This operation will disable most Google features and"
+    printf "${INDENTN}${YELLOW}break some of them${RESET}\n"
+
+    printf "${INDENTN}${BLUE}Total Google Activities to disable ${#services[@]}${RESET}"
+
     printf "${INDENTN}${YELLOW}[i]Disabling GMS${RESET}\n"
     sleep 2
-    for service in "${services[@]}"; do
-        pm disable "$service"
+    
+    while [ $i -lt ${#services[@]} ]; do
+        service_number=$((i + 1))
+        service="${services[$i]}"
+        printf "${INDENTN}${BLUE}[$service_number/${#services[@]}] Disabling the activity: $service\n"
+         pm disable "$service" > /dev/null 2>&1
+        status=$?
+    
+        if [ $status -eq 0 ]; then
+            printf "${INDENT}${BOLD}${GREEN}[+] Activity disabled successfully.\n"
+        else
+            printf "${INDENT}${RED}${BOLD}[!] Error: Unable to disable the activity.\n"
+        fi 
+        i=$((i + 1))
     done
-    printf "${INDENT}${GREEN}[i]GMS disable process completed.${RESET}\n"
+    printf "\n${INDENT}${GREEN}[i]GMS disable process completed.${RESET}\n"
     gms_homefix
 }
 
 gms_enable() {
+    i=0
+    printf "${INDENTN}${BLUE}Total Google Activities to enable ${#services[@]}${RESET}"
+
     printf "${INDENTN}${YELLOW}[i]Enabling GMS${RESET}\n"
     sleep 2
-    for service in "${services[@]}"; do
-        pm enable "$service"
+    
+    while [ $i -lt ${#services[@]} ]; do
+        service_number=$((i + 1))
+        service="${services[$i]}"
+        printf "${INDENTN}${BLUE}[$service_number/${#services[@]}] Enabling the activity: $service\n"
+         pm enable "$service" > /dev/null 2>&1
+        status=$?
+    
+        if [ $status -eq 0 ]; then
+            printf "${INDENT}${BOLD}${GREEN}[+] Activity enabled successfully.\n"
+        else
+            printf "${INDENT}${RED}${BOLD}[!] Error: Unable to enable the activity.\n"
+        fi 
+        i=$((i + 1))
     done
-    printf "${INDENT}${GREEN}[i]GMS enable process completed.${RESET}\n"
+    printf "\n${INDENT}${GREEN}[i]GMS enable process completed.${RESET}\n"
 }
 
 sot_calculator() {

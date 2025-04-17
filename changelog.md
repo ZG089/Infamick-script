@@ -1,4 +1,7 @@
 # Changelog for Infamick Script
+## V2.8 - GMS Disable/Enable update (April 17, 25)
+- Added activities number state
+- Added cleaner output with error/success
 ## V2.7 - Google Home "device not avaiable on the network" FIX (March 13, 25)
 - Added fix inside GMS Disable script
 ## V2.6 - Fixes (August 24, 24)
