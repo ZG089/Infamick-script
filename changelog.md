@@ -1,4 +1,14 @@
 # Changelog for Infamick Script
+## V3.0 - Infamick NEW V3 (April 18,25)
+- Update customize.sh script
+  1. Not needed to reboot after infamick installation
+  2. You can now (without reboot) run the command:'/data/local/tmp/infamick'
+  3. After reboot simply use 'infamick' command to run the script.
+- GMS fixes
+  1. Changed `infamick gmsd` to `infamick gms disable`
+  2. Changed `infamick gmse` to `infamick gms enable`
+  3. Enabled "Fix Google HOME 'device not avaiable on the network' error as command `infamick gms fix home`
+  4. New `infamick gms fix wallet` command
 ## V2.8 - GMS Disable/Enable update (April 17, 25)
 - Added activities number state
 - Added cleaner output with error/success

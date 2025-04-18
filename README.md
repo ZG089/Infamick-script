@@ -63,8 +63,10 @@ Available commands:
 - `infamick fix gms`: Fix GMS drain
 - `infamick fix oneui`: Fix Oneui drain
 - `infamick fix smgcare`: Fix general apps drain in Samsung Device Care
-- `infamick gmsd`: Disable GMS services
-- `infamick gmse`: Enable GMS services
+- `infamick gms disable`: Disable GMS services
+- `infamick gms enable`: Enable GMS services
+- `infamick gms fix home`: Fixes Google Wome 'device not avaiable on the network' error
+- `infamick gms fix wallet`: Fixes Google Wallet crashing/not adding new cards
 - `infamick info`: Show help and usage information
 - `infamick perf`: Boost Apps perfomances
 - `infamick selinux 0`: Set SELinux state to Permissive

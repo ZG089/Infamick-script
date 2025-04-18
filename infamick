@@ -411,10 +411,14 @@ services_gmshome=(
 "com.google.android.gms/com.google.android.location.network.NetworkLocationService"
 "enable com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
 )
+
+services_gmswallet=(
+"com.google.android.gms/.pay.main.PayActivity"
+)
 help_menu() {
     echo
     printf "\n${BOLD}infamick - System Utility Script${RESET}"
-    printf "\n${RED}${BOLD}2.8 (202504171)"
+    printf "\n${RED}${BOLD}3.0 (202504181)"
     echo
     printf "\n${GREEN}Usage:${RESET} infamick ${BOLD}<command> ${BLUE}${BOLD}<2ndcommand>${RESET}"
     echo
@@ -450,8 +454,12 @@ help_menu() {
     printf "\n  ${BOLD}fix${RESET} ${BLUE}${BOLD}smgcare${RESET}    - Fix general apps drain in"
     printf "\n                   Samsung Device Care"
     echo
-    printf "\n  ${BOLD}gmsd${RESET}    - Disables GMS services"
-    printf "\n  ${BOLD}gmse${RESET}    - Enables GMS services"
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}disable${RESET}    - Disables GMS services"
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}enable${RESET}     - Enables GMS services"
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}home${RESET}   - Fixes Google Home device not avaiable on"
+    printf "\n                   the network error" 
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}wallet${RESET} - Fixes Google Wallet crashing/not adding"
+    printf "\n                   new cards"
     echo
     printf "\n  ${BOLD}info${RESET}    - Display this help message"
     printf "\n  ${BOLD}--help${RESET}  - Alias for info"
@@ -553,21 +561,42 @@ battinfo() {
     exit 0
 }
 gms_homefix() {
-    printf "${INDENTN}${LIGHT_YELLOW}[?]Do you want to fix Google Home 'device not" 
-    printf "${INDENTN}${LIGHT_YELLOW}avaiable on the network' error? (Y/n): "
-        read -n 1 confirm_choice
-    case $confirm_choice in
-        [Yy]*)
+    printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Home 'device not" 
+    printf "${INDENTN}${LIGHT_YELLOW}avaiable on the network' error"
+        i=0
+        printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmshome[@]}${RESET}"
+        printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
+        sleep 2
+    
+        while [ $i -lt ${#services_gmshome[@]} ]; do
+            service_number=$((i + 1))
+            service="${services_gmshome[$i]}"
+            printf "${INDENTN}${BLUE}[$service_number/${#services_gmshome[@]}] Enabling the activity: $service\n"
+            pm enable "$services_gmshome" > /dev/null 2>&1
+            status=$?
+    
+            if [ $status -eq 0 ]; then
+               printf "${INDENT}${BOLD}${GREEN}[+] Activity enabled successfully.\n"
+            else
+               printf "${INDENT}${RED}${BOLD}[!] Error: Unable to enable the activity.\n"
+            fi
+            i=$((i + 1))
+        done
+        printf "\n${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
+}
+gms_walletfix() {
+    printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Wallet crashing/not" 
+    printf "${INDENTN}${LIGHT_YELLOW}adding new cards"
             i=0
-            printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmshome[@]}${RESET}"
+            printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmswallet[@]}${RESET}"
             printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
             sleep 2
     
-            while [ $i -lt ${#services_gmshome[@]} ]; do
+            while [ $i -lt ${#services_gmswallet[@]} ]; do
                 service_number=$((i + 1))
-                service="${services_gmshome[$i]}"
-                printf "${INDENTN}${BLUE}[$service_number/${#services_gmshome[@]}] Enabling the activity: $service\n"
-                pm enable "$services_gmshome" > /dev/null 2>&1
+                service="${services_gmswallet[$i]}"
+                printf "${INDENTN}${BLUE}[$service_number/${#services_gmswallet[@]}] Enabling the activity: $service\n"
+                pm enable "$services_gmswallet" > /dev/null 2>&1
                 status=$?
     
                 if [ $status -eq 0 ]; then
@@ -577,15 +606,7 @@ gms_homefix() {
                 fi
                 i=$((i + 1))
             done
-            printf "\n${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
-            ;;
-        [nN])
-          printf "${INDENTN}${GREEN}[i]No fix choosed${RESET}\n"
-            ;;
-        *)
-            printf "${INDENTN}${RED}Error: Wrong option '$confirm_choice'${RESET}\n"
-            ;;
-    esac
+            printf "\n${INDENT}${GREEN}[i]Google Wallet FIX process completed.${RESET}\n"
 }
 gms_disable() {
     i=0
@@ -612,7 +633,7 @@ gms_disable() {
         i=$((i + 1))
     done
     printf "\n${INDENT}${GREEN}[i]GMS disable process completed.${RESET}\n"
-    gms_homefix
+
 }
 
 gms_enable() {
@@ -1539,12 +1560,46 @@ case "$1" in
                 ;;
             esac
         ;;
-    gmsd)
-        gms_disable
-        ;;
-    gmse)
-        gms_enable
-        ;;
+gms)
+    if [ -z "$2" ]; then
+        printf "${INDENT}${RED}Error: Need second argument '$1' '$2'${RESET}"
+        printf "${INDENTN}Use '${BOLD}infamick info${RESET}' for usage information.\n"
+        exit 1
+    fi
+    case "$2" in
+        disable)
+            gms_disable
+            ;;
+        enable)
+            gms_enable
+            ;;
+        fix)
+            if [ -z "$3" ]; then
+                printf "${INDENT}${RED}Error: Missing fix target ('home' or 'wallet')${RESET}"
+                printf "${INDENTN}Usage: ${BOLD}infamick gms fix home${RESET}"
+                printf "${INDENTN}Usage: ${BOLD}infamick gms fix wallet${RESET}\n"
+                exit 1
+            fi
+            case "$3" in
+                home)
+                    gms_homefix
+                    ;;
+                wallet)
+                    gms_walletfix
+                    ;;
+                *)
+                    printf "${INDENT}${RED}Unknown fix target: '$3'${RESET}\n"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        *)
+            printf "${INDENT}${RED}Error: Unknown command '$1' '$2'${RESET}"
+            printf "${INDENTN}Use '${BOLD}infamick info${RESET}' for usage information.\n"
+            exit 1
+            ;;
+    esac
+    ;;
     perf)
         boost_app
         ;;
