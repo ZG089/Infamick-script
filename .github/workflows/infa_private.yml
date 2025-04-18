@@ -51,3 +51,5 @@ jobs:
             <b>Usage:</b> <a href="https://github.com/Infamousmick/Infamick-script?tab=readme-ov-file#usage">Click here</a>
 
             <b>Download:</b> <a href="${{ fromJson(steps.get_release.outputs.result).html_url }}">Latest Release</a>
+
+            <b>InfaChannel:</b> <a href="https://t.me/InfaScript">Join here</a>
