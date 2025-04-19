@@ -1,9 +1,11 @@
 # Changelog for Infamick Script
-## V3.0 - Infamick NEW V3 (April 18,25)
+## V3.1 - Small improvements (April 19, 25)
+- Minor bug fix
+## V3.0 - Infamick NEW V3 (April 18, 25)
 - Update customize.sh script
   1. Not needed to reboot after infamick installation
-  2. You can now (without reboot) run the command:'/data/local/tmp/infamick'
-  3. After reboot simply use 'infamick' command to run the script.
+  2. After installation/update you can now (without reboot) run the command: `/data/local/tmp/infamick`
+  3. After reboot simply use `infamick` command to run the script.
 - GMS fixes
   1. Changed `infamick gmsd` to `infamick gms disable`
   2. Changed `infamick gmse` to `infamick gms enable`

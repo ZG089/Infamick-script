@@ -27,7 +27,7 @@ Infamick is a powerful system utility script for rooted Android devices. It prov
 - **Drain Fixer**: Fixes various drain settings
 - **Extra Dim**: Open hidden Extra Dim menu
 - **Gesture**: Open hidden Gestures menu
-- **GMS servives** : Disable or Enable GMS services
+- **GMS services** : Disable or Enable GMS services
 - **Lock Network Bands**: Open Network Band settings
 - **SELinux state**: Mod to Permissive/Enforcing or show current SELinux state
 - **SOT Calculator**: Calculate the SOT with 100% battery
@@ -65,7 +65,7 @@ Available commands:
 - `infamick fix smgcare`: Fix general apps drain in Samsung Device Care
 - `infamick gms disable`: Disable GMS services
 - `infamick gms enable`: Enable GMS services
-- `infamick gms fix home`: Fixes Google Wome 'device not avaiable on the network' error
+- `infamick gms fix home`: Fixes Google Home 'device not avaiable on the network' error
 - `infamick gms fix wallet`: Fixes Google Wallet crashing/not adding new cards
 - `infamick info`: Show help and usage information
 - `infamick perf`: Boost Apps perfomances

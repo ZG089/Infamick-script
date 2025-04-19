@@ -12,6 +12,8 @@ model=$(getprop ro.product.system.model)
 INDENT="    "
 INDENTN="\n    "
 CHARGING_PATH="/sys/class/power_supply/battery/charging_enabled"
+Mod_Version=$(grep '^version=' /data/adb/modules/Infamick_script/module.prop | cut -d= -f2)
+Mod_VersionCode=$(grep '^versionCode=' /data/adb/modules/Infamick_script/module.prop | cut -d= -f2)
 
 reboot_quest() {
     read -n 1 confirm_choice
@@ -409,7 +411,7 @@ services=(
 )
 services_gmshome=(
 "com.google.android.gms/com.google.android.location.network.NetworkLocationService"
-"enable com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
+"com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
 )
 
 services_gmswallet=(
@@ -418,7 +420,7 @@ services_gmswallet=(
 help_menu() {
     echo
     printf "\n${BOLD}infamick - System Utility Script${RESET}"
-    printf "\n${RED}${BOLD}3.0 (202504181)"
+    printf "\n${RED}${BOLD}${Mod_Version} (${Mod_VersionCode})"
     echo
     printf "\n${GREEN}Usage:${RESET} infamick ${BOLD}<command> ${BLUE}${BOLD}<2ndcommand>${RESET}"
     echo
@@ -572,7 +574,7 @@ gms_homefix() {
             service_number=$((i + 1))
             service="${services_gmshome[$i]}"
             printf "${INDENTN}${BLUE}[$service_number/${#services_gmshome[@]}] Enabling the activity: $service\n"
-            pm enable "$services_gmshome" > /dev/null 2>&1
+            pm enable "$service" > /dev/null 2>&1
             status=$?
     
             if [ $status -eq 0 ]; then
@@ -596,7 +598,7 @@ gms_walletfix() {
                 service_number=$((i + 1))
                 service="${services_gmswallet[$i]}"
                 printf "${INDENTN}${BLUE}[$service_number/${#services_gmswallet[@]}] Enabling the activity: $service\n"
-                pm enable "$services_gmswallet" > /dev/null 2>&1
+                pm enable "$service" > /dev/null 2>&1
                 status=$?
     
                 if [ $status -eq 0 ]; then
