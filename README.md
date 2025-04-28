@@ -66,6 +66,7 @@ Available commands:
 - `infamick gms disable`: Disable GMS services
 - `infamick gms enable`: Enable GMS services
 - `infamick gms fix home`: Fixes Google Home 'device not avaiable on the network' error
+- `infamick gms fix oneui7`: Fixes Google Home crashing on ONEUI7 after gms disable
 - `infamick gms fix wallet`: Fixes Google Wallet crashing/not adding new cards
 - `infamick info`: Show help and usage information
 - `infamick perf`: Boost Apps perfomances

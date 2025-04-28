@@ -413,7 +413,9 @@ services_gmshome=(
 "com.google.android.gms/com.google.android.location.network.NetworkLocationService"
 "com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
 )
-
+services_gmshomeui7=(
+"com.google.android.gms/.phenotype.provider.ConfigurationProvider"
+)
 services_gmswallet=(
 "com.google.android.gms/.pay.main.PayActivity"
 )
@@ -460,6 +462,8 @@ help_menu() {
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}enable${RESET}     - Enables GMS services"
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}home${RESET}   - Fixes Google Home device not avaiable on"
     printf "\n                   the network error" 
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}oneui7${RESET} - Fixes Google Home crashing on"
+    printf "\n                   ONEUI 7 after gms disable"
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}wallet${RESET} - Fixes Google Wallet crashing/not adding"
     printf "\n                   new cards"
     echo
@@ -482,7 +486,7 @@ help_menu() {
     echo
     printf "\n  ${BOLD}smg${RESET} ${BLUE}${BOLD}dex_d${RESET} - Disable knox packages"
     echo
-    printf "\n  ${BOLD}smg${RESET} ${BLUE}${BOLD}dex_e${RESET} - Dnable knox packages"
+    printf "\n  ${BOLD}smg${RESET} ${BLUE}${BOLD}dex_e${RESET} - Enable knox packages"
     echo
     printf "\n  ${BOLD}smg${RESET} ${BLUE}${BOLD}dim${RESET}   - Open hidden Extra Dim menu"
     echo
@@ -585,6 +589,30 @@ gms_homefix() {
             i=$((i + 1))
         done
         printf "\n${INDENT}${GREEN}[i]Google Home FIX process completed.${RESET}\n"
+}
+gms_homeui7fix() {
+    printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Home crashing on" 
+    printf "${INDENTN}${LIGHT_YELLOW}ONEUI 7 after gms disable"
+        i=0
+        printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmshomeui7[@]}${RESET}"
+        printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
+        sleep 2
+    
+        while [ $i -lt ${#services_gmshomeui7[@]} ]; do
+            service_number=$((i + 1))
+            service="${services_gmshomeui7[$i]}"
+            printf "${INDENTN}${BLUE}[$service_number/${#services_gmshomeui7[@]}] Enabling the activity: $service\n"
+            pm enable "$service" > /dev/null 2>&1
+            status=$?
+    
+            if [ $status -eq 0 ]; then
+               printf "${INDENT}${BOLD}${GREEN}[+] Activity enabled successfully.\n"
+            else
+               printf "${INDENT}${RED}${BOLD}[!] Error: Unable to enable the activity.\n"
+            fi
+            i=$((i + 1))
+        done
+        printf "\n${INDENT}${GREEN}[i]Google Home ONEUI 7 process completed.${RESET}\n"
 }
 gms_walletfix() {
     printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Wallet crashing/not" 
@@ -1579,12 +1607,16 @@ gms)
             if [ -z "$3" ]; then
                 printf "${INDENT}${RED}Error: Missing fix target ('home' or 'wallet')${RESET}"
                 printf "${INDENTN}Usage: ${BOLD}infamick gms fix home${RESET}"
+                printf "${INDENTN}Usage: ${BOLD}infamick gms fix oneui7${RESET}"
                 printf "${INDENTN}Usage: ${BOLD}infamick gms fix wallet${RESET}\n"
                 exit 1
             fi
             case "$3" in
                 home)
                     gms_homefix
+                    ;;
+                oneui7)
+                    gms_homeui7fix
                     ;;
                 wallet)
                     gms_walletfix

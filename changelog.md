@@ -1,4 +1,7 @@
 # Changelog for Infamick Script
+## V3.2 - New Google Home ONEUI7 Fix (April 28, 25)
+- New `infamick gms fix oneui7` command
+  1. Fixes Google Home crashing on ONEUI 7 after gms disable
 ## V3.1 - Small improvements (April 19, 25)
 - Minor bug fix
 ## V3.0 - Infamick NEW V3 (April 18, 25)
