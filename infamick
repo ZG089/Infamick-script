@@ -409,6 +409,11 @@ services=(
 "com.google.android.gms/.stats.service.DropBoxEntryAddedService"
 "com.google.android.gms/.chimera.GmsIntentOperationService"
 )
+services_gmsgames=(
+"com.google.android.gms/.games.chimera.GamesContentProviderProxy"
+"com.google.android.gms/.games.chimera.GamesAndroidServiceProxy"
+"com.google.android.gms/.games.chimera.GamesAsyncServiceProxy"
+)
 services_gmshome=(
 "com.google.android.gms/com.google.android.location.network.NetworkLocationService"
 "com.google.android.gms/.cast.media.CastMediaRoute2ProviderService_Persistent"
@@ -460,6 +465,7 @@ help_menu() {
     echo
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}disable${RESET}    - Disables GMS services"
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}enable${RESET}     - Enables GMS services"
+    printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}games${RESET}  - Fixes Google Play Games not signing in"
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}home${RESET}   - Fixes Google Home device not avaiable on"
     printf "\n                   the network error" 
     printf "\n  ${BOLD}gms${RESET} ${BLUE}${BOLD}fix ${RED}oneui7${RESET} - Fixes Google Home crashing on"
@@ -565,6 +571,29 @@ battinfo() {
     printf "${INDENTN}${GREEN}[i] Your Battery health is ${RED}${BOLD}$health${RESET}"
     printf "${INDENTN}${GREEN}[i] Your battery charging cycles are ${RED}${BOLD}$cycles${RESET}\n"
     exit 0
+}
+gms_gamesfix() {
+    printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Play Games not signing in" 
+        i=0
+        printf "\n${INDENTN}${BLUE}Total Google Activities to enable ${#services_gmsgames[@]}${RESET}"
+        printf "${INDENTN}${YELLOW}[i] Fixing.. \n${RESET}"
+        sleep 2
+    
+        while [ $i -lt ${#services_gmsgames[@]} ]; do
+            service_number=$((i + 1))
+            service="${services_gmsgames[$i]}"
+            printf "${INDENTN}${BLUE}[$service_number/${#services_gmsgames[@]}] Enabling the activity: $service\n"
+            pm enable "$service" > /dev/null 2>&1
+            status=$?
+    
+            if [ $status -eq 0 ]; then
+               printf "${INDENT}${BOLD}${GREEN}[+] Activity enabled successfully.\n"
+            else
+               printf "${INDENT}${RED}${BOLD}[!] Error: Unable to enable the activity.\n"
+            fi
+            i=$((i + 1))
+        done
+        printf "\n${INDENT}${GREEN}[i]Google Play Games FIX process completed.${RESET}\n"
 }
 gms_homefix() {
     printf "${INDENTN}${LIGHT_YELLOW}[i]This will fix Google Home 'device not" 
@@ -1606,12 +1635,16 @@ gms)
         fix)
             if [ -z "$3" ]; then
                 printf "${INDENT}${RED}Error: Missing fix target ('home' or 'wallet')${RESET}"
+                printf "${INDENTN}Usage: ${BOLD}infamick gms fix games${RESET}"
                 printf "${INDENTN}Usage: ${BOLD}infamick gms fix home${RESET}"
                 printf "${INDENTN}Usage: ${BOLD}infamick gms fix oneui7${RESET}"
                 printf "${INDENTN}Usage: ${BOLD}infamick gms fix wallet${RESET}\n"
                 exit 1
             fi
             case "$3" in
+                games)
+                    gms_gamesfix
+                    ;;
                 home)
                     gms_homefix
                     ;;

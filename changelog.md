@@ -1,4 +1,7 @@
 # Changelog for Infamick Script
+## V3.3 - New Google Play Games Fix (June 12, 25)
+- New `infamick gms fix games` command
+  1. Fixes Google Play Games not signing in after gms disable
 ## V3.2 - New Google Home ONEUI7 Fix (April 28, 25)
 - New `infamick gms fix oneui7` command
   1. Fixes Google Home crashing on ONEUI 7 after gms disable
